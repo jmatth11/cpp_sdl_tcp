@@ -77,7 +77,7 @@ class Game {
             //
             hostent *server;
             // buffer to send to server
-            char write_buffer[8];
+            unsigned char write_buffer[8];
             portno = 8080;
             // establish the tcp socket. Domain, Type, Protocol; IPV4, TCP, Unspecified
             sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -114,7 +114,7 @@ class Game {
                 exit(1);
             }
             // create separate read buffer
-            char read_buffer[73];
+            unsigned char read_buffer[73];
             bzero(read_buffer, 73);
 
             while (isRunning) {
@@ -132,9 +132,9 @@ class Game {
                     std::cout<<"Error in reading buffer!\n";
                     exit(1);
                 }
-                if (strncmp(read_buffer, "null", 4) != 0) {
+                if (strncmp((char*)read_buffer, "null", 4) != 0) {
                     //std::printf("read %d data %s", n, read_buffer);
-                    if (strncmp(read_buffer, "exit", 4) == 0) {
+                    if (strncmp((char*)read_buffer, "exit", 4) == 0) {
                         std::cout<<"disconnected..\n";
                         break;
                     }
@@ -242,7 +242,7 @@ class Game {
             //
             hostent *server;
             // buffer to send to server
-            char write_buffer[8];
+            unsigned char write_buffer[8];
             portno = 8080;
             // establish the tcp socket. Domain, Type, Protocol; IPV4, TCP, Unspecified
             sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -279,7 +279,7 @@ class Game {
                 exit(1);
             }
             // create separate read buffer
-            char read_buffer[73];
+            unsigned char read_buffer[73];
             bzero(read_buffer, 73);
             while (true) {
                 // recieve returned data from the socket. upto 72 bytes. last param is flags
@@ -288,9 +288,9 @@ class Game {
                     std::cout<<"Error in reading buffer!\n";
                     exit(1);
                 }
-                if (strncmp(read_buffer, "null", 4) != 0) {
+                if (strncmp((char*)read_buffer, "null", 4) != 0) {
                     //std::printf("read %d data %s", n, read_buffer);
-                    if (strncmp(read_buffer, "exit", 4) == 0) {
+                    if (strncmp((char*)read_buffer, "exit", 4) == 0) {
                         std::cout<<"disconnected..\n";
                         break;
                     }
@@ -311,7 +311,7 @@ class Game {
 
 
 
-        static void updatePlayers(Window* window, std::map<int, Character*>& tmp_map, char buf[], int n) {
+        static void updatePlayers(Window* window, std::map<int, Character*>& tmp_map, unsigned char buf[], int n) {
             int tmp_id, tmp_x, tmp_y;
             for (int i = 0; i < n; i += 12) {
                 tmp_id = ((int)buf[i]) + (((int)buf[i+1])<<8) + (((int)buf[i+2])<<16) + (((int)buf[i+3])<<24);
@@ -330,11 +330,11 @@ class Game {
         }
 
 
-        static void writePlayerPositionBuffer(char arr[], SDL_Rect* rect) {
+        static void writePlayerPositionBuffer(unsigned char arr[], SDL_Rect* rect) {
             int shift = 0;
             for (int i = 0; i<4; ++i) {
-                arr[i]   = int8_t(rect->x>>shift);
-                arr[i+4] = int8_t(rect->y>>shift);
+                arr[i]   = uint8_t(rect->x>>shift);
+                arr[i+4] = uint8_t(rect->y>>shift);
                 shift += 8;
             }
         }
