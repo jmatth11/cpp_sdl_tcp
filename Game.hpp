@@ -42,6 +42,7 @@ class Game {
             player = NULL;
         }
 
+        // TODO fix this version because a segmentation fault happens most likely when accessing the players map object
         void run () {
 
             auto th = std::thread(handleConnection, window, player, std::ref(players), std::ref(isRunning));
